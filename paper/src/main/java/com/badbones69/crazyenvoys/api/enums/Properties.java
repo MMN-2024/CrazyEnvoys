@@ -110,6 +110,9 @@ public enum Properties {
     max_radius(ConfigKeys.envoys_max_radius, newProperty("Settings.Max-Radius", ConfigKeys.envoys_max_radius.getDefaultValue()), 1),
     min_radius(ConfigKeys.envoys_min_radius, newProperty("Settings.Min-Radius", ConfigKeys.envoys_min_radius.getDefaultValue()), 1),
 
+    min_y(ConfigKeys.envoys_min_y, newProperty("Settings.Min-Y", ConfigKeys.envoys_min_y.getDefaultValue()), 1),
+    max_y(ConfigKeys.envoys_max_y, newProperty("Settings.Max-Y", ConfigKeys.envoys_max_y.getDefaultValue()), 1),
+
     locations_broadcast(ConfigKeys.envoys_locations_broadcast, newProperty("Settings.Envoy-Locations.Broadcast", ConfigKeys.envoys_locations_broadcast.getDefaultValue()), false),
 
     run_time(ConfigKeys.envoys_run_time, newProperty("Settings.Envoy-Run-Time", ConfigKeys.envoys_run_time.getDefaultValue())),

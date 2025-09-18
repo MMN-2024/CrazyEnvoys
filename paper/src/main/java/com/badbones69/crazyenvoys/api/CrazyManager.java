@@ -656,7 +656,12 @@ public class CrazyManager {
                 int maxRadius = this.config.getProperty(ConfigKeys.envoys_max_radius);
                 Location location = this.center.clone();
                 location.add(-(maxRadius) + ThreadLocalRandom.current().nextInt(maxRadius * 2), 0, -(maxRadius) + ThreadLocalRandom.current().nextInt(maxRadius * 2));
-                location = location.getWorld().getHighestBlockAt(location).getLocation();
+                
+                // Find a suitable Y level within the configured range
+                Location suitableLocation = findSuitableYLevel(location);
+                if (suitableLocation == null) continue;
+                
+                location = suitableLocation;
 
                 if (!location.getChunk().isLoaded() && !location.getChunk().load()) continue;
 

@@ -65,6 +65,10 @@ envoys:
             max-radius: 300
             # The minimum distance from the middle the envoys will fall from the center.
             min-radius: 20
+            # The minimum Y level where envoys can spawn.
+            min-y: -64
+            # The maximum Y level where envoys can spawn.
+            max-y: 320
     # If all drop locations should be broadcast when an envoy starts.
     broadcast: false
     schedule:

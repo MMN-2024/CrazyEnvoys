@@ -117,6 +117,12 @@ public class ConfigKeys implements SettingsHolder {
     @Comment("The minimum distance from the middle the envoys will fall from the center.")
     public static final Property<Integer> envoys_min_radius = newProperty("envoys.generation.random-locations.min-radius", 20);
 
+    @Comment("The minimum Y level where envoys can spawn.")
+    public static final Property<Integer> envoys_min_y = newProperty("envoys.generation.random-locations.min-y", -64);
+
+    @Comment("The maximum Y level where envoys can spawn.")
+    public static final Property<Integer> envoys_max_y = newProperty("envoys.generation.random-locations.max-y", 320);
+
     @Comment("If all drop locations should be broadcast when an envoy starts.")
     public static final Property<Boolean> envoys_locations_broadcast = newProperty("envoys.broadcast", false);
 

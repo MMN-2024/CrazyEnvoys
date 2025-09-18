@@ -21,6 +21,8 @@ public class ConfigMigration extends PlainMigrationService {
                 | Properties.random_locations.moveBoolean(reader, configurationData)
                 | Properties.max_radius.moveInteger(reader, configurationData)
                 | Properties.min_radius.moveInteger(reader, configurationData)
+                | Properties.min_y.moveInteger(reader, configurationData)
+                | Properties.max_y.moveInteger(reader, configurationData)
                 | Properties.locations_broadcast.moveBoolean(reader, configurationData)
                 | Properties.run_time.moveString(reader, configurationData)
                 | Properties.run_time_toggle.moveBoolean(reader, configurationData)
