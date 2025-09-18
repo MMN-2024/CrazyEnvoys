@@ -42,9 +42,52 @@ public class PlaceholderAPISupport extends PlaceholderExpansion {
         return switch (lower) {
             case "cooldown" -> this.crazyManager.isEnvoyActive() ? this.messages.getProperty(MessageKeys.hologram_on_going) : this.crazyManager.getNextEnvoyTime();
             case "time_left" -> this.crazyManager.isEnvoyActive() ? this.crazyManager.getEnvoyRunTimeLeft() : this.messages.getProperty(MessageKeys.hologram_not_running);
+            case "cooldown_hours_minutes" -> this.crazyManager.isEnvoyActive() ? this.messages.getProperty(MessageKeys.hologram_on_going) : convertToHoursMinutes(this.crazyManager.getNextEnvoyTime());
             case "envoys_left" -> String.valueOf(this.crazyManager.getActiveEnvoys().size());
             default -> "";
         };
+    }
+
+    private String convertToHoursMinutes(String timeString) {
+        // Parse the existing time format and convert to hours and minutes only
+        if (timeString == null || timeString.isEmpty()) return "";
+        
+        // Remove any existing formatting and extract time components
+        String[] parts = timeString.split(" ");
+        int totalMinutes = 0;
+        
+        for (String part : parts) {
+            if (part.contains("h")) {
+                try {
+                    int hours = Integer.parseInt(part.replace("h", "").replace(",", ""));
+                    totalMinutes += hours * 60;
+                } catch (NumberFormatException ignored) {}
+            } else if (part.contains("m")) {
+                try {
+                    int minutes = Integer.parseInt(part.replace("m", "").replace(",", ""));
+                    totalMinutes += minutes;
+                } catch (NumberFormatException ignored) {}
+            } else if (part.contains("d")) {
+                try {
+                    int days = Integer.parseInt(part.replace("d", "").replace(",", ""));
+                    totalMinutes += days * 24 * 60;
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        
+        // Convert back to hours and minutes format
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+        
+        if (hours > 0 && minutes > 0) {
+            return hours + "h " + minutes + "m";
+        } else if (hours > 0) {
+            return hours + "h";
+        } else if (minutes > 0) {
+            return minutes + "m";
+        } else {
+            return "0m";
+        }
     }
     
     @Override
