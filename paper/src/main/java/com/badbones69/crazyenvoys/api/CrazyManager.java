@@ -705,6 +705,50 @@ public class CrazyManager {
         return this.locationSettings.getDropLocations();
     }
 
+    /**
+     * Find a suitable Y level for envoy spawning within the configured range.
+     * 
+     * @param baseLocation The base location (X, Z coordinates)
+     * @return A suitable location within the Y range, or null if none found
+     */
+    private Location findSuitableYLevel(Location baseLocation) {
+        int minY = this.config.getProperty(ConfigKeys.envoys_min_y);
+        int maxY = this.config.getProperty(ConfigKeys.envoys_max_y);
+        
+        World world = baseLocation.getWorld();
+        if (world == null) return null;
+        
+        // Clamp Y values to world limits
+        minY = Math.max(minY, world.getMinHeight());
+        maxY = Math.min(maxY, world.getMaxHeight() - 1);
+        
+        if (minY >= maxY) return null;
+        
+        // Try to find a suitable location starting from the top
+        for (int y = maxY; y >= minY; y--) {
+            Location testLocation = new Location(world, baseLocation.getBlockX(), y, baseLocation.getBlockZ());
+            Block block = testLocation.getBlock();
+            Block blockAbove = testLocation.clone().add(0, 1, 0).getBlock();
+            
+            // Check if this is a suitable spawn location
+            // We want a solid block with air above it, or air with a solid block below
+            if (block.getType() != Material.AIR && blockAbove.getType() == Material.AIR && 
+                !this.blacklistedBlocks.contains(block.getType())) {
+                return testLocation.clone().add(0, 1, 0); // Spawn above the solid block
+            } else if (block.getType() == Material.AIR) {
+                // Check if there's a solid block below within reasonable distance
+                for (int checkY = y - 1; checkY >= Math.max(minY, y - 10); checkY--) {
+                    Block belowBlock = new Location(world, baseLocation.getBlockX(), checkY, baseLocation.getBlockZ()).getBlock();
+                    if (belowBlock.getType() != Material.AIR && !this.blacklistedBlocks.contains(belowBlock.getType())) {
+                        return testLocation; // Spawn in the air above the solid block
+                    }
+                }
+            }
+        }
+        
+        return null; // No suitable location found
+    }
+
     @NotNull
     private StringBuilder getStringBuilder() {
         StringBuilder locations = new StringBuilder();
