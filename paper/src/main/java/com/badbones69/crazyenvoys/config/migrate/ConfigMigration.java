@@ -26,7 +26,7 @@ public class ConfigMigration extends PlainMigrationService {
                 | Properties.run_time_toggle.moveBoolean(reader, configurationData)
                 | Properties.cooldown_toggle.moveBoolean(reader, configurationData)
                 | Properties.envoys_cooldown.moveString(reader, configurationData)
-                | Properties.envoys_time.moveString(reader, configurationData)
+                | Properties.envoys_time.moveList(reader, configurationData)
                 | Properties.envoys_ignore_empty_server.moveBoolean(reader, configurationData)
                 | Properties.minimum_players_toggle.moveBoolean(reader, configurationData)
                 | Properties.minimum_players_count.moveInteger(reader, configurationData)

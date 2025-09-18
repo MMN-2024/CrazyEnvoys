@@ -136,7 +136,7 @@ public class ConfigKeys implements SettingsHolder {
     public static final Property<String> envoys_cooldown = newProperty("envoys.schedule.countdown.time", "1h");
 
     @Comment("A specified time of the day that an envoy will happen. Please use 1-12 for hours and 0-59 for minutes.")
-    public static final Property<String> envoys_time = newProperty("envoys.schedule.countdown.timestamp", "2:00 AM");
+    public static final Property<List<String>> envoys_time = newListProperty("envoys.schedule.countdown.timestamp", List.of("2:00 AM"));
 
     @Comment("If the envoy event should spawn if the server is empty.")
     public static final Property<Boolean> envoys_ignore_empty_server = newProperty("envoys.schedule.ignore-empty-server", true);

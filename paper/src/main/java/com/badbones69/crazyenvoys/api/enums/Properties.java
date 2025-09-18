@@ -118,7 +118,7 @@ public enum Properties {
     cooldown_toggle(ConfigKeys.envoys_countdown, newProperty("Settings.Envoy-Cooldown-Toggle", ConfigKeys.envoys_countdown.getDefaultValue()), false),
 
     envoys_cooldown(ConfigKeys.envoys_cooldown, newProperty("Settings.Envoy-Cooldown", ConfigKeys.envoys_cooldown.getDefaultValue())),
-    envoys_time(ConfigKeys.envoys_time, newProperty("Settings.Envoy-Time", ConfigKeys.envoys_time.getDefaultValue())),
+    envoys_time(ConfigKeys.envoys_time, newListProperty("Settings.Envoy-Time", ConfigKeys.envoys_time.getDefaultValue()), Collections.emptyList()),
 
     envoys_ignore_empty_server(ConfigKeys.envoys_ignore_empty_server, newProperty("Settings.Envoy-Filter-Players-Zero", ConfigKeys.envoys_ignore_empty_server.getDefaultValue()), false),
 

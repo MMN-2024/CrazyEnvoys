@@ -107,20 +107,58 @@ public class CrazyManager {
     }
 
     private void getEnvoyTime(Calendar cal) {
-        String time = this.config.getProperty(ConfigKeys.envoys_time);
-        int hour = Integer.parseInt(time.split(" ")[0].split(":")[0]);
-        int min = Integer.parseInt(time.split(" ")[0].split(":")[1]);
-        int calender = Calendar.AM;
+        List<String> times = this.config.getProperty(ConfigKeys.envoys_time);
+        Calendar now = Calendar.getInstance();
+        Calendar nextEnvoy = null;
+        
+        // Find the next upcoming envoy time
+        for (String time : times) {
+            Calendar tempCal = Calendar.getInstance();
+            
+            int hour = Integer.parseInt(time.split(" ")[0].split(":")[0]);
+            int min = Integer.parseInt(time.split(" ")[0].split(":")[1]);
+            int calender = Calendar.AM;
 
-        if (time.split(" ")[1].equalsIgnoreCase("PM")) calender = Calendar.PM;
+            if (time.split(" ")[1].equalsIgnoreCase("PM")) calender = Calendar.PM;
 
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.getTime(); // Without this makes the hours not change for some reason.
-        cal.set(Calendar.MINUTE, min);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.AM_PM, calender);
+            tempCal.set(Calendar.HOUR_OF_DAY, hour);
+            tempCal.getTime(); // Without this makes the hours not change for some reason.
+            tempCal.set(Calendar.MINUTE, min);
+            tempCal.set(Calendar.SECOND, 0);
+            tempCal.set(Calendar.AM_PM, calender);
 
-        if (cal.before(Calendar.getInstance())) cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
+            // If this time has already passed today, set it for tomorrow
+            if (tempCal.before(now)) {
+                tempCal.set(Calendar.DAY_OF_MONTH, tempCal.get(Calendar.DAY_OF_MONTH) + 1);
+            }
+            
+            // Find the earliest upcoming time
+            if (nextEnvoy == null || tempCal.before(nextEnvoy)) {
+                nextEnvoy = tempCal;
+            }
+        }
+        
+        // If no valid time found (shouldn't happen), default to first time + 1 day
+        if (nextEnvoy == null && !times.isEmpty()) {
+            String time = times.get(0);
+            int hour = Integer.parseInt(time.split(" ")[0].split(":")[0]);
+            int min = Integer.parseInt(time.split(" ")[0].split(":")[1]);
+            int calender = Calendar.AM;
+
+            if (time.split(" ")[1].equalsIgnoreCase("PM")) calender = Calendar.PM;
+
+            nextEnvoy = Calendar.getInstance();
+            nextEnvoy.set(Calendar.HOUR_OF_DAY, hour);
+            nextEnvoy.getTime();
+            nextEnvoy.set(Calendar.MINUTE, min);
+            nextEnvoy.set(Calendar.SECOND, 0);
+            nextEnvoy.set(Calendar.AM_PM, calender);
+            nextEnvoy.set(Calendar.DAY_OF_MONTH, nextEnvoy.get(Calendar.DAY_OF_MONTH) + 1);
+        }
+        
+        if (nextEnvoy != null) {
+            cal.setTimeInMillis(nextEnvoy.getTimeInMillis());
+        }
     }
 
     /**
